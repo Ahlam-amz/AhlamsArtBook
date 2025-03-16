@@ -23,6 +23,47 @@ function createStar() {
     }, 5000);
 }
 
+function adjustFlipbookSize() {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    if (width < 768) {  // Mobile screens
+        $(".flipbook").turn("size", width * 0.9, height * 0.8);
+    } else {  // Desktop
+        $(".flipbook").turn("size", 1000, 680);
+    }
+}
+
+// Adjust on page load and resize
+$(document).ready(adjustFlipbookSize);
+$(window).resize(adjustFlipbookSize);
+
+
+if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    $(".flipbook").turn({
+        display: "single", // Show one page at a time
+        width:  window.innerWidth * 0.9,
+        height: window.innerHeight * 0.8,
+        autoCenter: true,
+        when: {
+            turned: function(event, page, view) {
+                console.log("Page turned: " + page);
+            }
+        }
+    });
+
+    // Add tap-to-turn feature
+    $(".flipbook").on("click", function(e) {
+        var half = $(this).width() / 2;
+        if (e.pageX < half) {
+            $(".flipbook").turn("previous");
+        } else {
+            $(".flipbook").turn("next");
+        }
+    });
+}
+
+
 /*const pages= document.querySelectorAll(".page");
 const img= document.querySelector("img");
 var colorThief= new colorThief();
